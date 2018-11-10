@@ -10,6 +10,8 @@
 
 ## Development frontend server
 
+Install dependecies with `npm install`.
+
 Run `ng serve` in `rss-analyzer-ui` folder to start a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 ## Development backend server
