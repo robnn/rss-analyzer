@@ -24,7 +24,7 @@ public class Detector {
         Element body = document.select("body").get(0);
         NodeTraversor.filter(new AggregatingFilter(), body);
 
-        printTextNodesWithMultipleOccurrence();
+//        printTextNodesWithMultipleOccurrence();
         return candidates;
     }
 
@@ -36,6 +36,11 @@ public class Detector {
     }
 
 
+    /**
+     * Prints the candidates to the standard output.
+     * Use this for testing purposes only.
+     */
+    @SuppressWarnings("unused")
     public void printTextNodesWithMultipleOccurrence(){
         candidates.forEach((k, v) -> {
             System.out.println(k);
