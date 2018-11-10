@@ -2,11 +2,11 @@
 
 ## Develop build status
 
-![develop build status](https://travis-ci.com/robnn/rss-analyzer.svg?token=1gPHpTfqK7tHXxSEHjKq&amp;branch=develop)
+![develop build status](https://travis-ci.com/robnn/rss-analyzer.svg?branch=develop)
 
 ## Master build status
 
-![develop build status](https://travis-ci.com/robnn/rss-analyzer.svg?token=1gPHpTfqK7tHXxSEHjKq&amp;branch=master)
+![develop build status](https://travis-ci.com/robnn/rss-analyzer.svg?branch=master)
 
 ## Development frontend server
 
