@@ -13,7 +13,7 @@ import java.util.*;
 
 @SuppressWarnings("WeakerAccess")
 @Component
-public class Detector {
+public class CandidateDetector {
 
     private Map<TagWithDepth, List<Node>> candidates = new TreeMap<>();
 
@@ -73,4 +73,7 @@ public class Detector {
         }
     }
 
+    public Map<TagWithDepth, List<Node>> getCandidates() {
+        return candidates;
+    }
 }

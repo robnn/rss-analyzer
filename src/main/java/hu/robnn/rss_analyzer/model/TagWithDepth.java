@@ -5,8 +5,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 public class TagWithDepth implements Comparable<TagWithDepth>{
-    private final String tag;
+    private String tag;
     private int depth;
+
+    public TagWithDepth() {
+    }
 
     public TagWithDepth(String tag, int depth) {
         this.tag = tag;
@@ -15,6 +18,10 @@ public class TagWithDepth implements Comparable<TagWithDepth>{
 
     public int getDepth() {
         return depth;
+    }
+
+    public String getTag() {
+        return tag;
     }
 
     @Override

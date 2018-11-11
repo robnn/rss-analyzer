@@ -58,10 +58,4 @@ public class RssAnalyzerConfiguration {
         }
         return entityManagerFactoryBean;
     }
-
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 }

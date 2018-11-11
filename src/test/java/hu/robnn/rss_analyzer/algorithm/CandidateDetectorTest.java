@@ -13,17 +13,17 @@ import java.util.Map;
 
 import static org.junit.Assert.*;
 
-public class DetectorTest {
+public class CandidateDetectorTest {
 
     /**
      * Tests the parser method, with a large page.
      */
     @Test
     public void parseHtmlTest() {
-        Detector detector = new Detector();
+        CandidateDetector candidateDetector = new CandidateDetector();
         try {
             String testPage = readTestPage("index.html");
-            Document document = detector.parseHtml(testPage);
+            Document document = candidateDetector.parseHtml(testPage);
             assertNotNull(document);
         } catch (IOException e) {
             e.printStackTrace();
@@ -33,11 +33,11 @@ public class DetectorTest {
 
     @Test
     public void detectHtmlTest() {
-        Detector detector = new Detector();
+        CandidateDetector candidateDetector = new CandidateDetector();
         try {
             String testPage = readTestPage("index.html");
-            Document document = detector.parseHtml(testPage);
-            Map<TagWithDepth, List<Node>> aggregate = detector.aggregate(document);
+            Document document = candidateDetector.parseHtml(testPage);
+            Map<TagWithDepth, List<Node>> aggregate = candidateDetector.aggregate(document);
             assertEquals(14, aggregate.size());
         } catch (IOException e) {
             e.printStackTrace();
