@@ -15,6 +15,7 @@ import java.util.List;
 
 @Component
 @RestController("/detection")
+@CrossOrigin
 public class DetectionAPI {
 
     private final DetectionService detectionService;
