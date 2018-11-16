@@ -1,81 +1,93 @@
 <div class="margined">
-  <h2>Interval setup</h2>
-  <div class="form-group">
-    <form>
-      <div>
-        <label>Set interval</label>
-        <input type="number" class="form-control" id="interval" [(ngModel)]="interval" name="intervalNumber"
-          placeholder="Set the polling interval in seconds">
-      </div>
-      <br>
-      <button class="btn btn-primary" (click)="setInterval()" type="button">Change!</button>
-    </form>
-  </div>
-
+  <h1>RSS analyzer admin page</h1>
   <br>
-  <h2>URL setup</h2>
-  <div class="form-group">
-    <form>
-      <div>
-        <label for="urlText">Set URL:</label>
-        <input type="text" class="form-control" id="urlText" [(ngModel)]="urlText" name="urlText" placeholder="After you set the url, you can select a candidate">
+  <div class="row">
+    <div class="col-md-6 panel panel-default">
+      <h2>Interval setup</h2>
+      <div class="form-group">
+        <form>
+          <div>
+            <label>Set interval</label>
+            <input type="number" class="form-control" id="interval" [(ngModel)]="interval" name="intervalNumber"
+              placeholder="Set the polling interval in seconds">
+          </div>
+          <br>
+          <button class="btn btn-primary" (click)="setInterval()" type="button">Change!</button>
+        </form>
       </div>
-      <br>
-      <button class="btn btn-primary" (click)="setUrl()" type="button">Change!</button>
-    </form>
-  </div>
-  <br>
-  <div *ngIf="this.candidates.length > 0">
-    <h2>Candidates:</h2>
-    <span>Beside you can see the sample data of the supplied page. Please select a tag and depth for the RSS feed.</span>
-    <br>
-    <ngb-accordion #acc="ngbAccordion">
-      <ngb-panel *ngFor="let candidate of candidates" id="{{candidate.tagWithDepth.tag}}{{candidate.tagWithDepth.depth}}"
-        title="Tag: {{candidate.tagWithDepth.tag}}, Depth: {{candidate.tagWithDepth.depth}}:">
-        <ng-template ngbPanelContent>
-          <ul>
-            <li *ngFor="let data of candidate.candidates">
-              {{data}}
-            </li>
-          </ul>
-
-        </ng-template>
-      </ngb-panel>
-    </ngb-accordion>
-    <br>
-    <div class="form-group">
-
-      <form>
-        <div>
-          <label for="candidateSelector">Set tag and depth:</label>
-          <select class="form-control" [(ngModel)]="selectedCandidate" name="candidateSelector" id="candidateSelector">
-            <option *ngFor="let candidate of candidates" [ngValue]="candidate">Tag: {{candidate.tagWithDepth.tag}},
-              Depth: {{candidate.tagWithDepth.depth}}</option>
-          </select>
-
-        </div>
-        <br>
-        <button class="btn btn-primary" (click)="setCandidate()" type="button">Set candidate!</button>
-      </form>
     </div>
-    <br>
-    <div *ngIf="this.sentOutNodes.length > 0">
-      <h2>Sent out to clients:</h2>
+
+    <div class="col-md-6 panel panel-default">
+      <h2>URL setup</h2>
+      <div class="form-group">
+        <form>
+          <div>
+            <label for="urlText">Set URL:</label>
+            <input type="text" class="form-control" id="urlText" [(ngModel)]="urlText" name="urlText" placeholder="After you set the url, you can select a candidate">
+          </div>
+          <br>
+          <button class="btn btn-primary" (click)="setUrl()" type="button">Change!</button>
+        </form>
+      </div>
+      <br>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-md-6 panel panel-default" *ngIf="this.candidates.length > 0">
+      <h2>Candidates:</h2>
+      <span>Beside you can see the sample data of the supplied page. Please select a tag and depth for the RSS feed.</span>
       <br>
       <ngb-accordion #acc="ngbAccordion">
-        <ngb-panel *ngFor="let node of sentOutNodes" id="{{node}}"
-          title="{{node.timeStamp | date: 'medium'}}">
+        <ngb-panel *ngFor="let candidate of candidates" id="{{candidate.tagWithDepth.tag}}{{candidate.tagWithDepth.depth}}"
+          title="Tag: {{candidate.tagWithDepth.tag}}, Depth: {{candidate.tagWithDepth.depth}}:">
+          <ng-template ngbPanelContent class="collapse">
+            <ul>
+              <li *ngFor="let data of candidate.candidates">
+                {{data}}
+              </li>
+            </ul>
+
+          </ng-template>
+        </ngb-panel>
+      </ngb-accordion>
+      <br>
+      <div class="form-group">
+
+        <form>
+          <div>
+            <label for="candidateSelector">Set tag and depth:</label>
+            <select class="form-control" [(ngModel)]="selectedCandidate" name="candidateSelector" id="candidateSelector">
+              <option *ngFor="let candidate of candidates" [ngValue]="candidate">Tag: {{candidate.tagWithDepth.tag}},
+                Depth: {{candidate.tagWithDepth.depth}}</option>
+            </select>
+
+          </div>
+          <br>
+          <button class="btn btn-primary" (click)="setCandidate()" type="button">Set candidate!</button>
+        </form>
+      </div>
+    </div>
+    <div class="col-md-6 panel panel-default" *ngIf="this.sentOutNodes.length > 0">
+      <h2>Sent out to clients:</h2>
+      <span>Beside you can see the data which was sent out the subscribers, with time stamp.</span>
+      <br>
+      <ngb-accordion #acc="ngbAccordion">
+        <ngb-panel *ngFor="let node of sentOutNodes" id="{{node.timeStamp}}" title="{{node.timeStamp | date: 'medium'}}">
           <ng-template ngbPanelContent>
             <ul>
               <li *ngFor="let data of node.nodes">
                 {{data}}
               </li>
             </ul>
-  
+
           </ng-template>
         </ngb-panel>
       </ngb-accordion>
       <br>
-  </div>
+    </div>
 
-</div>
+
+
+  </div>

@@ -21,6 +21,7 @@ public class CandidateDetector {
      * Aggregates the document elements by the depth in the dom, and tag
      */
     public Map<TagWithDepth, List<Node>> aggregate(Document document){
+        candidates.clear();
         Element body = document.select("body").get(0);
         NodeTraversor.filter(new AggregatingFilter(), body);
 

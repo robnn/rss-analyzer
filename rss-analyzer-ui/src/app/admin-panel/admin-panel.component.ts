@@ -24,6 +24,7 @@ export class AdminPanelComponent implements OnInit {
 
   public wsstate: Observable<string>;
 
+  private connected: boolean = false;
   private sentOutNodes: NodeHolder[] = new Array();
   private urlText: string;
   private candidates: CandidateHolder[] = new Array();
@@ -60,10 +61,14 @@ export class AdminPanelComponent implements OnInit {
   }
 
   connect() {
-    this.wsstate = this.stompService.state.pipe(map((state: number) => StompState[state]));
-    this.message = this.stompService.subscribe(WebSocketConfig.topic);
-    this.message.subscribe(data => {
-      this.sentOutNodes.push(JSON.parse(data.body) as NodeHolder);
-    })
+    if(!this.connected){
+      this.wsstate = this.stompService.state.pipe(map((state: number) => StompState[state]));
+      this.message = this.stompService.subscribe(WebSocketConfig.topic);
+      this.message.subscribe(data => {
+        this.sentOutNodes.push(JSON.parse(data.body) as NodeHolder);
+      });
+      this.connected = true;
+    }
+    
   }
 }
