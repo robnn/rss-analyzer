@@ -2,6 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { DetectionService } from '../detection.service';
 import { UrlHolder } from '../model/UrlHolder';
 import { CandidateHolder } from '../model/CandidateHolder';
+import { Subscription, Observable } from 'rxjs';
+
+import { Message } from '@stomp/stompjs';
+import { StompService, StompState } from '@stomp/ng2-stompjs';
+import { WebSocketConfig } from '../WebSocketConfig';
+
+import { map } from 'rxjs/operators';
+import { NodeHolder } from '../model/NodeHolder';
 
 @Component({
   selector: 'app-admin-panel',
@@ -10,16 +18,24 @@ import { CandidateHolder } from '../model/CandidateHolder';
 })
 export class AdminPanelComponent implements OnInit {
 
-  private urlText : string;
-  private candidates : CandidateHolder[] = new Array();
-  private selectedCandidate : CandidateHolder;
+
+  public message: Observable<Message>;
+
+
+  public wsstate: Observable<string>;
+
+  private sentOutNodes: NodeHolder[] = new Array();
+  private urlText: string;
+  private candidates: CandidateHolder[] = new Array();
+  private selectedCandidate: CandidateHolder;
   private interval: number;
-  constructor(private service: DetectionService) { }
+  constructor(private service: DetectionService,
+    private stompService: StompService) { }
 
   ngOnInit() {
   }
 
-  setUrl(){
+  setUrl() {
     let urlHolder = new UrlHolder();
     urlHolder.pageUrl = this.urlText;
     this.service.detectForWebPage(urlHolder).subscribe(data => {
@@ -29,16 +45,25 @@ export class AdminPanelComponent implements OnInit {
     });
   }
 
-  setCandidate(){
+  setCandidate() {
     console.log(this.selectedCandidate);
     this.service.setFeed(this.selectedCandidate.tagWithDepth).subscribe(data => {
 
     });
+    this.connect();
   }
 
-  setInterval(){
+  setInterval() {
     this.service.changeInterval(this.interval).subscribe(data => {
 
     });
+  }
+
+  connect() {
+    this.wsstate = this.stompService.state.pipe(map((state: number) => StompState[state]));
+    this.message = this.stompService.subscribe(WebSocketConfig.topic);
+    this.message.subscribe(data => {
+      this.sentOutNodes.push(JSON.parse(data.body) as NodeHolder);
+    })
   }
 }

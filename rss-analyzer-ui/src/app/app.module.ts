@@ -6,6 +6,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppComponent } from './app.component';
 import { AdminPanelComponent } from './admin-panel/admin-panel.component';
+import { StompService, StompConfig } from '@stomp/ng2-stompjs';
+import { stompConfig } from './WebSocketConfig';
 
 
 @NgModule({
@@ -19,7 +21,11 @@ import { AdminPanelComponent } from './admin-panel/admin-panel.component';
     HttpClientModule,
     NgbModule
   ],
-  providers: [],
+  providers: [StompService,
+    {
+      provide: StompConfig,
+      useValue: stompConfig
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

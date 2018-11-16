@@ -59,7 +59,23 @@
       </form>
     </div>
     <br>
-
+    <div *ngIf="this.sentOutNodes.length > 0">
+      <h2>Sent out to clients:</h2>
+      <br>
+      <ngb-accordion #acc="ngbAccordion">
+        <ngb-panel *ngFor="let node of sentOutNodes" id="{{node}}"
+          title="Nodes">
+          <ng-template ngbPanelContent>
+            <ul>
+              <li *ngFor="let data of node.nodes">
+                {{data}}
+              </li>
+            </ul>
+  
+          </ng-template>
+        </ngb-panel>
+      </ngb-accordion>
+      <br>
   </div>
 
 </div>
