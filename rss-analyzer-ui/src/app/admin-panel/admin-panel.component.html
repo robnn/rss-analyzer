@@ -64,7 +64,7 @@
       <br>
       <ngb-accordion #acc="ngbAccordion">
         <ngb-panel *ngFor="let node of sentOutNodes" id="{{node}}"
-          title="Nodes">
+          title="{{node.timeStamp | date: 'medium'}}">
           <ng-template ngbPanelContent>
             <ul>
               <li *ngFor="let data of node.nodes">

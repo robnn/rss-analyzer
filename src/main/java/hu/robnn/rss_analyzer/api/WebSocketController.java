@@ -17,7 +17,7 @@ public class WebSocketController {
     public void publishWebSocket(NodeHolder data){
         template.convertAndSend("/topic/notification", data);
     }
-    
+
     @SendTo("/topic/notification")
     public NodeHolder sendChangedNodes(NodeHolder a) {
         return a;

@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 @Component
 public class RssFeedSupplierDummyImpl implements RssFeedSupplier {
 
-    //TODO ezt a rendes implementációban is meg kell hívni
     private final WebSocketController webSocketController;
 
     public RssFeedSupplierDummyImpl(WebSocketController webSocketController) {
@@ -23,6 +22,8 @@ public class RssFeedSupplierDummyImpl implements RssFeedSupplier {
     @Override
     public void sendMessageToRegisteredReaders(List<Node> newNodes) {
         System.out.println(newNodes);
+
+        //TODO ezt a rendes implementációban is meg kell hívni
         sendToFrontend(new NodeHolder(newNodes.stream().map(Node::toString).collect(Collectors.toList())));
     }
 
