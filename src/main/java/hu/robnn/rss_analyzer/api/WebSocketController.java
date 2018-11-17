@@ -13,8 +13,12 @@ public class WebSocketController {
         this.template = template;
     }
 
-    public void publishWebSocket(NodeHolder data){
+    public void publishWebSocket(NodeHolder data) {
         template.convertAndSend("/topic/notification", data);
+    }
+
+    public void publishWebSocket(String rss) {
+        template.convertAndSend("/topic/notification", rss);
     }
 
 }

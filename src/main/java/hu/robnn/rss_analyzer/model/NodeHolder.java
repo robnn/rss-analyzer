@@ -7,10 +7,10 @@ import java.util.List;
 
 @Data
 public class NodeHolder {
-    private List<String> nodes;
+    private List<Node> nodes;
     private Date timeStamp;
 
-    public NodeHolder(List<String> nodes) {
+    public NodeHolder(List<Node> nodes) {
         this.nodes = nodes;
         this.timeStamp = new Date();
     }
