@@ -61,21 +61,30 @@ public class ChangeDetector{
         } else {
             counter = 0;
         }
-        //TODO db használatot kitalálni, addig csak 1 elem lesz mindig felülcsapva
-        String oldVersionOfWebPage = htmlRepository.findAll().get(0).getHtmlText();
-        Document previousPage = candidateDetector.parseHtml(oldVersionOfWebPage);
 
         String newVersionOfWebPage = httpClient.getWebPageAsString(urlHolder);
-        Document newPage = candidateDetector.parseHtml(newVersionOfWebPage);
+        if (!htmlRepository.findAll().isEmpty()) {
+            //TODO db használatot kitalálni, addig csak 1 elem lesz mindig felülcsapva
+            String oldVersionOfWebPage = htmlRepository.findAll().get(0).getHtmlText();
+            Document previousPage = candidateDetector.parseHtml(oldVersionOfWebPage);
 
-        List<Node> nodes = detectChangedNodes(previousPage, newPage);
-        rssFeedSupplier.sendMessageToRegisteredReaders(nodes);
 
-        //TODO jelenleg töröljük a db-t és belementjük az új stringet, ezt nem így kéne
-        htmlRepository.deleteAll();
+            Document newPage = candidateDetector.parseHtml(newVersionOfWebPage);
+
+            List<Node> nodes = detectChangedNodes(previousPage, newPage);
+            if(!nodes.isEmpty()) {
+                rssFeedSupplier.sendMessageToRegisteredReaders(nodes);
+
+                //TODO jelenleg töröljük a db-t és belementjük az új stringet, ezt nem így kéne
+                htmlRepository.deleteAll();
+            }
+
+        }
         HtmlStringEntity newEntity = new HtmlStringEntity();
         newEntity.setHtmlText(newVersionOfWebPage);
         htmlRepository.save(newEntity);
+
+
     }
 
     private List<Node> detectChangedNodes(Document previousPage, Document newPage){

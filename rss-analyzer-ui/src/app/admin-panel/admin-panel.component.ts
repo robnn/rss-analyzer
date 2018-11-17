@@ -40,6 +40,7 @@ export class AdminPanelComponent implements OnInit {
     let urlHolder = new UrlHolder();
     urlHolder.pageUrl = this.urlText;
     this.service.detectForWebPage(urlHolder).subscribe(data => {
+      this.candidates = new Array();
       data.forEach(x => {
         this.candidates.push(x);
       })
