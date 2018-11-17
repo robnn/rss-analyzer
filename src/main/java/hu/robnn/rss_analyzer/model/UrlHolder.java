@@ -1,20 +1,13 @@
 package hu.robnn.rss_analyzer.model;
 
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class UrlHolder {
     private String pageUrl;
-
-    public UrlHolder(String pageUrl) {
-        this.pageUrl = pageUrl;
-    }
-
-    public UrlHolder() {
-    }
-
-    public String getPageUrl() {
-        return pageUrl;
-    }
-
-    public void setPageUrl(String pageUrl) {
-        this.pageUrl = pageUrl;
-    }
 }

@@ -9,7 +9,7 @@ import java.net.URL;
 
 @Component
 public class HttpClientImpl implements HttpClient {
-       @Override
+    @Override
     public String getWebPageAsString(UrlHolder urlHolder) {
         try {
             String line;

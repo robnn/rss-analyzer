@@ -6,6 +6,7 @@ import hu.robnn.rss_analyzer.http.HttpClient;
 import hu.robnn.rss_analyzer.model.TagWithDepth;
 import hu.robnn.rss_analyzer.model.UrlHolder;
 import hu.robnn.rss_analyzer.rss.RssFeedSupplier;
+import lombok.Setter;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Node;
 import org.springframework.context.annotation.Scope;
@@ -28,9 +29,15 @@ public class ChangeDetector{
     private final HttpClient httpClient;
     private final RssFeedSupplier rssFeedSupplier;
 
+    @Setter
     private TagWithDepth neededFeedable;
+
+    @Setter
     private Integer interval;
+
+    @Setter
     private UrlHolder urlHolder;
+
     private Integer counter = 0;
 
     public ChangeDetector(CandidateDetector candidateDetector, HtmlRepository htmlRepository, HttpClient httpClient, RssFeedSupplier rssFeedSupplier) {
@@ -40,17 +47,6 @@ public class ChangeDetector{
         this.rssFeedSupplier = rssFeedSupplier;
     }
 
-    public void setNeededFeedable(TagWithDepth neededFeedable) {
-        this.neededFeedable = neededFeedable;
-    }
-
-    public void setInterval(Integer interval) {
-        this.interval = interval;
-    }
-
-    public void setUrlHolder(UrlHolder urlHolder) {
-        this.urlHolder = urlHolder;
-    }
 
     /**
      * Scheduled for every seconds, so the interval must be set in seconds.

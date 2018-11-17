@@ -1,28 +1,18 @@
 package hu.robnn.rss_analyzer.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class TagWithDepth implements Comparable<TagWithDepth>{
     private String tag;
     private int depth;
-
-    public TagWithDepth() {
-    }
-
-    public TagWithDepth(String tag, int depth) {
-        this.tag = tag;
-        this.depth = depth;
-    }
-
-    public int getDepth() {
-        return depth;
-    }
-
-    public String getTag() {
-        return tag;
-    }
 
     @Override
     public boolean equals(Object o) {
