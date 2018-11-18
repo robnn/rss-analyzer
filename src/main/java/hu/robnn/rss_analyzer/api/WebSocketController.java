@@ -1,6 +1,7 @@
 package hu.robnn.rss_analyzer.api;
 
 import hu.robnn.rss_analyzer.model.NodeHolder;
+import hu.robnn.rss_analyzer.model.RssStringHolder;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
@@ -17,7 +18,7 @@ public class WebSocketController {
         template.convertAndSend("/topic/notification", data);
     }
 
-    public void publishWebSocket(String rss) {
+    public void publishWebSocket(RssStringHolder rss) {
         template.convertAndSend("/topic/notification", rss);
     }
 

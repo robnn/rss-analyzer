@@ -2,6 +2,7 @@ package hu.robnn.rss_analyzer.rss;
 
 import hu.robnn.rss_analyzer.api.WebSocketController;
 import hu.robnn.rss_analyzer.model.NodeHolder;
+import hu.robnn.rss_analyzer.model.RssStringHolder;
 import hu.robnn.rss_analyzer.util.NodeParser;
 import hu.robnn.rss_analyzer.util.RSSFeedCreator;
 import lombok.AllArgsConstructor;
@@ -9,6 +10,7 @@ import org.jsoup.nodes.Node;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 //TODO hasonlóan a http-hez ezt is törölni kell, amint megvan a tényleges implementáció
@@ -43,6 +45,6 @@ public class RssFeedSupplierImpl implements RssFeedSupplier {
 
     @Override
     public void sendToFrontend(String rss) {
-        webSocketController.publishWebSocket(rss);
+        webSocketController.publishWebSocket(new RssStringHolder(new Date(), rss));
     }
 }

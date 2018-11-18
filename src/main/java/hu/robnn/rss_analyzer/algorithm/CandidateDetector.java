@@ -15,7 +15,7 @@ import java.util.*;
 @Component
 public class CandidateDetector {
 
-    private Map<TagWithDepth, List<Node>> candidates = new TreeMap<>();
+    private Map<TagWithDepth, List<Node>> candidates = new HashMap<>();
 
     /**
      * Aggregates the document elements by the depth in the dom, and tag

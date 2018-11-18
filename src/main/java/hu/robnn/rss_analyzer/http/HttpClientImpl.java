@@ -28,6 +28,7 @@ public class HttpClientImpl implements HttpClient {
 
             return sb.toString();
         } catch (Exception e) {
+            e.printStackTrace();
             return "<html><body><p>The given url is invalid.</p></body></html>";
         }
     }

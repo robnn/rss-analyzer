@@ -8,12 +8,14 @@ import { AppComponent } from './app.component';
 import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 import { StompService, StompConfig } from '@stomp/ng2-stompjs';
 import { stompConfig } from './WebSocketConfig';
+import { XmlPipe } from './XmlPipe'
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    AdminPanelComponent
+    AdminPanelComponent,
+    XmlPipe
   ],
   imports: [
     BrowserModule,

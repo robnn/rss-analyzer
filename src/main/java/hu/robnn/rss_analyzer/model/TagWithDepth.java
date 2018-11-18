@@ -10,7 +10,7 @@ import java.util.Objects;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TagWithDepth implements Comparable<TagWithDepth>{
+public class TagWithDepth {
     private String tag;
     private int depth;
 
@@ -34,13 +34,5 @@ public class TagWithDepth implements Comparable<TagWithDepth>{
                 "tag='" + tag + '\'' +
                 ", depth=" + depth +
                 '}';
-    }
-
-    /**
-     * Need to implement the Comparable interface, to be able to be the key of a sorted map, like TreeMap
-     */
-    @Override
-    public int compareTo(@NotNull TagWithDepth tagWithDepth) {
-        return Integer.compare(tagWithDepth.depth, this.depth);
     }
 }

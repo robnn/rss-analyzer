@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +34,7 @@ public class ChangeDetector{
     private TagWithDepth neededFeedable;
 
     @Setter
-    private Integer interval;
+    private Integer interval = 5;
 
     @Setter
     private UrlHolder urlHolder;
@@ -76,9 +77,10 @@ public class ChangeDetector{
                 rssFeedSupplier.sendMessageToRegisteredReaders(nodes);
 
                 //TODO jelenleg töröljük a db-t és belementjük az új stringet, ezt nem így kéne
-                htmlRepository.deleteAll();
+
             }
 
+            htmlRepository.deleteAll();
         }
         HtmlStringEntity newEntity = new HtmlStringEntity();
         newEntity.setHtmlText(newVersionOfWebPage);
@@ -93,6 +95,18 @@ public class ChangeDetector{
 
         List<Node> oldElements = previousAggregate.get(neededFeedable);
         List<Node> newElements = newAggregate.get(neededFeedable);
+
+        previousAggregate.forEach( (k,v) -> {
+            List<Node> nodes = new ArrayList<>();
+            newAggregate.get(k).forEach(node -> {
+                if(v.stream().noneMatch(prevNode -> prevNode.toString().equals(node.toString()))){
+                    nodes.add(node);
+                }
+            });
+            if(!nodes.isEmpty()){
+                System.out.println("Nodes changed on key: " + k);
+            }
+        });
 
         newElements.removeAll(oldElements);
         return newElements;

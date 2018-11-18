@@ -66,7 +66,8 @@ export class AdminPanelComponent implements OnInit {
       this.wsstate = this.stompService.state.pipe(map((state: number) => StompState[state]));
       this.message = this.stompService.subscribe(WebSocketConfig.topic);
       this.message.subscribe(data => {
-        this.sentOutNodes.push(JSON.parse(data.body) as NodeHolder);
+        let node = JSON.parse(data.body) as NodeHolder;
+        this.sentOutNodes.push(node);
       });
       this.connected = true;
     }

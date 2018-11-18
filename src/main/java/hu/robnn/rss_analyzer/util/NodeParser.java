@@ -5,6 +5,7 @@ import hu.robnn.rss_analyzer.model.Element;
 import hu.robnn.rss_analyzer.model.Node;
 import hu.robnn.rss_analyzer.model.NodeHolder;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public final class NodeParser {
         newNodes.forEach(n -> {
 
             //Csak a levelek érdekelnek minket jelenleg
-            if (n.childNodes() == null || n.childNodes().isEmpty()) {
+            if (n.childNodes().stream().allMatch(child -> child instanceof TextNode)) {
 
                 Node node = new Node();
 

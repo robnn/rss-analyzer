@@ -76,12 +76,10 @@
       <ngb-accordion #acc="ngbAccordion">
         <ngb-panel *ngFor="let node of sentOutNodes" id="{{node.timeStamp}}" title="{{node.timeStamp | date: 'medium'}}">
           <ng-template ngbPanelContent>
-            <ul>
-              <li *ngFor="let data of node.nodes">
-                {{data}}
-              </li>
-            </ul>
+            <pre>
+              {{node.rssString || xml}}
 
+            </pre>
           </ng-template>
         </ngb-panel>
       </ngb-accordion>
