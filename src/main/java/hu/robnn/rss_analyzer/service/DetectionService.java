@@ -38,6 +38,7 @@ public class DetectionService {
     public List<CandidateHolder> detectForUrlHolder(UrlHolder urlHolder){
         changeDetector.setUrlHolder(urlHolder);
         Document document = candidateDetector.parseHtml(httpClient.getWebPageAsString(urlHolder));
+        rssFeedSupplier.setWebPageURL(urlHolder.getPageUrl());
 
         Map<TagWithDepth, List<Node>> aggregate = candidateDetector.aggregate(document);
 
@@ -66,9 +67,5 @@ public class DetectionService {
         changeDetector.setPreviousId(null);
         changeDetector.setInterval(5);
         LOGGER.info("Stopped detection");
-    }
-
-    public void setNeededAttributes(AttributesHolder attributes){
-        //TODO megcsinálni az RSS supplieren hogy legyen mit hívni
     }
 }

@@ -48,10 +48,4 @@ public class DetectionAPI {
         detectionService.stopDetection();
         return HttpEntity.EMPTY;
     }
-
-    @RequestMapping(path  = "detection/setNeededAttributes", method = RequestMethod.POST)
-    public HttpEntity<?> setNeededAttributes(@RequestBody AttributesHolder attributesHolder){
-        detectionService.setNeededAttributes(attributesHolder);
-        return HttpEntity.EMPTY;
-    }
 }

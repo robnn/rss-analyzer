@@ -6,13 +6,12 @@ import hu.robnn.rss_analyzer.model.Node;
 import hu.robnn.rss_analyzer.model.NodeHolder;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.TextNode;
-import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public final class NodeParser {
-    public static NodeHolder parse(List<org.jsoup.nodes.Node> newNodes, List<String> desiredAttributes) {
+    public static NodeHolder parse(List<org.jsoup.nodes.Node> newNodes, String url) {
         ArrayList<Node> nodeList = new ArrayList<>();
 
         newNodes.forEach(n -> {
@@ -30,20 +29,16 @@ public final class NodeParser {
                 elementsFromDoc.forEach(e -> {
                     Element element = new Element();
                     element.setTag(e.tagName());
-                    System.out.println("TagName: " + e.tagName());
 
                     element.setContent(e.text());
-                    System.out.println("TagValue: " + e.text());
 
                     ArrayList<Attribute> attributes = new ArrayList<>();
                     e.attributes().forEach(a -> {
 
                         //Itt lehet típus szerint szűrni
                         //Ha megadott típusokat csak azokat fogadjuk el, ha nem akkor bármit.
-                        if (desiredAttributes == null || desiredAttributes .isEmpty() || desiredAttributes .contains(a.getKey())) {
-                            attributes.add(new Attribute(a.getKey(), a.getValue()));
-                            System.out.println("\tAttribute: " + a.toString());
-                        }
+
+                        attributes.add(new Attribute(a.getKey(), a.getValue()));
 
                     });
                     element.setAttributes(attributes);
@@ -56,7 +51,7 @@ public final class NodeParser {
             }
         });
 
-        return new NodeHolder(nodeList);
+        return new NodeHolder(nodeList, url);
     }
 
     private NodeParser() {

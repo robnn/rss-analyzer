@@ -1,5 +1,6 @@
 package hu.robnn.rss_analyzer.util;
 
+import hu.robnn.rss_analyzer.model.Attribute;
 import hu.robnn.rss_analyzer.model.NodeHolder;
 
 import javax.xml.stream.XMLEventFactory;
@@ -7,20 +8,19 @@ import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.*;
-import java.io.*;
+import java.io.FileOutputStream;
 
 public final class RSSFeedCreator {
-    public static String create(NodeHolder nodeHolder) {
+    public static void create(NodeHolder nodeHolder) {
         try {
-            //String outputFile = "output.txt";
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            String outputFile = "output.xml";
+            FileOutputStream fileOutputStream = new FileOutputStream(outputFile);
 
             // create a XMLOutputFactory
             XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
 
             // create XMLEventWriter
-            //XMLEventWriter eventWriter = outputFactory.createXMLEventWriter(new FileOutputStream(outputFile));
-            XMLEventWriter eventWriter = outputFactory.createXMLEventWriter(byteArrayOutputStream);
+            XMLEventWriter eventWriter = outputFactory.createXMLEventWriter(new FileOutputStream(outputFile));
 
             // create a EventFactory
             XMLEventFactory eventFactory = XMLEventFactory.newInstance();
@@ -42,26 +42,38 @@ public final class RSSFeedCreator {
 
             eventWriter.add(eventFactory.createStartElement("", "", "channel"));
             eventWriter.add(end);
+            createAttribute(eventWriter, "title", "rss-analyzer");
+            createAttribute(eventWriter, "link", nodeHolder.getUrl());
+            createAttribute(eventWriter, "description", "This RSS feed is automatically generated from analyzing the website.");
 
 
             nodeHolder.getNodes().forEach(node -> node.getElements().forEach(e -> {
-                createAttribute(eventWriter, "tag", e.getTag());
-                createAttribute(eventWriter, "content", e.getContent());
-                e.getAttributes().forEach(a -> {
-                    try {
-                        eventWriter.add(eventFactory.createStartElement("", "", "item"));
-                        eventWriter.add(end);
+                try {
+                    eventWriter.add(eventFactory.createStartElement("", "", "item"));
+                    eventWriter.add(end);
+                } catch (XMLStreamException e1) {
+                    e1.printStackTrace();
+                }
+                createAttribute(eventWriter, "description", e.getContent());
 
-                        createAttribute(eventWriter, a.getName(), a.getValue());
-                        eventWriter.add(end);
+                String link = "";
 
-                        eventWriter.add(eventFactory.createEndElement("", "", "item"));
-                        eventWriter.add(end);
-                    } catch (XMLStreamException ex) {
-                        System.err.println("Error while converting attributes to XML.");
+                for (Attribute a : e.getAttributes()) {
+                    if (a.getName().equals("href") && a.getValue().startsWith("http")) {
+                        link = a.getValue();
                     }
+                }
 
-                });
+                if (!link.isEmpty()) {
+                    createAttribute(eventWriter, "link", link);
+                }
+
+                try {
+                    eventWriter.add(eventFactory.createEndElement("", "", "item"));
+                    eventWriter.add(end);
+                } catch (XMLStreamException ne) {
+                    ne.printStackTrace();
+                }
             }));
 
             eventWriter.add(end);
@@ -75,10 +87,12 @@ public final class RSSFeedCreator {
 
             eventWriter.close();
 
-            return byteArrayOutputStream.toString();
+            fileOutputStream.flush();
+            fileOutputStream.close();
+           /* System.out.println(byteArrayOutputStream.toString());
+            return byteArrayOutputStream.toString();*/
         } catch (Exception e) {
             System.err.println("Error while processing NodeHolder.");
-            return null;
         }
 
     }

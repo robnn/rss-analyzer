@@ -6,41 +6,46 @@ import hu.robnn.rss_analyzer.model.RssStringHolder;
 import hu.robnn.rss_analyzer.util.NodeParser;
 import hu.robnn.rss_analyzer.util.RSSFeedCreator;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.jsoup.nodes.Node;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-@AllArgsConstructor
+@NoArgsConstructor
 public class RssFeedSupplierImpl implements RssFeedSupplier {
 
-    private final WebSocketController webSocketController;
+    private WebSocketController webSocketController;
+    private String url;
+
+    @Autowired
+    public void setWebSocketController(WebSocketController webSocketController){
+        this.webSocketController = webSocketController;
+    }
 
     @Override
     public void sendMessageToRegisteredReaders(List<Node> newNodes) {
-        //System.out.println(newNodes);
-
-
-        //TODO: frontendről bekérni a kívánt tag típusokat
-        List<String> desiredTags = new ArrayList<>();
-        desiredTags.add("href");
-        desiredTags.add("value");
-
-        NodeHolder nodeHolder = NodeParser.parse(newNodes, desiredTags);
-        String rssFeed = RSSFeedCreator.create(nodeHolder);
+        NodeHolder nodeHolder = NodeParser.parse(newNodes, url);
+        RSSFeedCreator.create(nodeHolder);
 
         //TODO ezt a rendes implementációban is meg kell hívni
-        //sendToFrontend(nodeHolder);
-        sendToFrontend(newNodes, rssFeed);
+        //sendToFrontend(newNodes);
     }
 
     @Override
     public void sendToFrontend(List<Node> nodes, String rss) {
         webSocketController.publishWebSocket(new RssStringHolder(
                 nodes.stream().map(Node::toString).collect(Collectors.toList()), new Date(), rss));
+    }
+
+    @Override
+    public void setWebPageURL(String url){
+        this.url = url;
     }
 }

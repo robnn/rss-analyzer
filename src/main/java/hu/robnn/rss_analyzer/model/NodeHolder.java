@@ -9,9 +9,11 @@ import java.util.List;
 public class NodeHolder {
     private List<Node> nodes;
     private Date timeStamp;
+    private String url;
 
-    public NodeHolder(List<Node> nodes) {
+    public NodeHolder(List<Node> nodes, String url) {
         this.nodes = nodes;
         this.timeStamp = new Date();
+        this.url = url;
     }
 }
