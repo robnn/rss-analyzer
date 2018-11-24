@@ -54,6 +54,8 @@ public final class RSSFeedCreator {
                 } catch (XMLStreamException e1) {
                     e1.printStackTrace();
                 }
+
+                createAttribute(eventWriter, "title", e.getContent());
                 createAttribute(eventWriter, "description", e.getContent());
 
                 String link = "";

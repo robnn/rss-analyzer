@@ -1,6 +1,6 @@
 <div class="margined">
   <div class="title">
-    <h1>RSS analyzer admin page</h1>
+    <h1><img src="../../assets/rss-icon.png" style="width:40px;"> RSS analyzer admin page</h1>
   </div>
   <hr />
   <div class="row">
@@ -14,7 +14,7 @@
               placeholder="Set the polling interval in seconds, default is 5 seconds">
           </div>
           <br>
-          <button class="btn btn-primary" (click)="setInterval()" type="button">Change!</button>
+          <button class="btn btn-dark" (click)="setInterval()" type="button">Change!</button>
           </form>
       </div>
     </div>
@@ -28,8 +28,8 @@
             <input type="text" class="form-control" id="urlText" [(ngModel)]="urlText" name="urlText" placeholder="After you set the url, you can select a candidate">
           </div>
           <br>
-          <button class="btn btn-primary" (click)="setUrl()" type="button">Change!</button>
-          <button class="btn btn-primary padding" (click)="resetSettings()" type="button">Stop current detection</button>
+          <button class="btn btn-dark" (click)="setUrl()" type="button">Change!</button>
+          <button *ngIf="this.sentOutNodes.length > 0" class="btn btn-dark padding" (click)="resetSettings()" type="button">Stop current detection</button>
         </form>
       </div>
       <br>
@@ -40,7 +40,8 @@
   <div class="row">
     <div class="col-md-6 panel panel-default" *ngIf="this.candidates.length > 0">
       <h2>Candidates:</h2>
-      <span>Beside you can see the sample data of the supplied page. Please select a tag and depth for the RSS feed.</span>
+      <p>Beside you can see the sample data of the supplied page. Please select a tag and depth for the RSS feed.</p>
+      <p>Note: currently the system only works with 'a' tags, so the samples are filtered, to only show that.</p>
       <br>
       <div class="form-group">
 
@@ -54,19 +55,8 @@
 
           </div>
           <br>
-          <button class="btn btn-primary" (click)="setCandidate()" type="button">Set candidate!</button>
+          <button class="btn btn-dark" (click)="setCandidate()" type="button">Set candidate!</button>
         </form>
-        <br>
-        <form>
-            <div>
-              <label for="attributes">Type needed attributes:</label>
-              <input type="text" class="form-control" [(ngModel)]="attributes" id="attributes" name="attributes"
-              placeholder="Type the needed attributes, separated with ; (like: href;value)">
-  
-            </div>
-            <br>
-            <button class="btn btn-primary" (click)="setAttributes()" type="button">Set attributes!</button>
-          </form>
       </div>
       <br>
       <h3>Sample data:</h3>
@@ -87,8 +77,9 @@
 
     </div>
     <div class="col-md-6 panel panel-default" *ngIf="this.sentOutNodes.length > 0">
-      <h2>Sent out to clients:</h2>
-      <span>Beside you can see the data which was sent out the subscribers, with time stamp.</span>
+      <h2>Nodes:</h2>
+      <p>Beside you can see the data which was published to rss, the first element is the full nodelist, after that, only the new nodes will be displayed.</p>
+      <p><a href="http://localhost:8080/detection/rss" target="_blank" rel="noopener noreferrer"><img class="icon" src="../../assets/rss-icon.png"></a> Click here for the RSS feed </p>
       <br>
       <ngb-accordion #acc="ngbAccordion">
         <ngb-panel *ngFor="let node of sentOutNodes" id="{{node.timeStamp}}" title="{{node.timeStamp | date: 'medium'}}">
@@ -101,8 +92,6 @@
                 </li>
               </ul>
             </div>
-            <h4>Formatted RSS text:</h4>
-            <pre class="ludwig">{{node.rssString || xml}}</pre>
           </ng-template>
         </ngb-panel>
       </ngb-accordion>

@@ -1,8 +1,10 @@
 package hu.robnn.rss_analyzer.algorithm;
 
+import hu.robnn.rss_analyzer.api.WebSocketController;
 import hu.robnn.rss_analyzer.dao.HtmlRepository;
 import hu.robnn.rss_analyzer.dao.model.HtmlStringEntity;
 import hu.robnn.rss_analyzer.http.HttpClient;
+import hu.robnn.rss_analyzer.model.RssStringHolder;
 import hu.robnn.rss_analyzer.model.TagWithDepth;
 import hu.robnn.rss_analyzer.model.UrlHolder;
 import hu.robnn.rss_analyzer.rss.RssFeedSupplier;
@@ -15,6 +17,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -29,10 +32,12 @@ import java.util.stream.Collectors;
 public class ChangeDetector{
 
     private static final Logger LOGGER = Logger.getLogger("ChangeDetector");
+
     private final CandidateDetector candidateDetector;
     private final HtmlRepository htmlRepository;
     private final HttpClient httpClient;
     private final RssFeedSupplier rssFeedSupplier;
+    private final WebSocketController webSocketController;
 
     @Setter
     private TagWithDepth neededFeedable;
@@ -48,11 +53,12 @@ public class ChangeDetector{
     @Setter
     private Long previousId = null;
 
-    public ChangeDetector(CandidateDetector candidateDetector, HtmlRepository htmlRepository, HttpClient httpClient, RssFeedSupplier rssFeedSupplier) {
+    public ChangeDetector(CandidateDetector candidateDetector, HtmlRepository htmlRepository, HttpClient httpClient, RssFeedSupplier rssFeedSupplier, WebSocketController webSocketController) {
         this.candidateDetector = candidateDetector;
         this.htmlRepository = htmlRepository;
         this.httpClient = httpClient;
         this.rssFeedSupplier = rssFeedSupplier;
+        this.webSocketController = webSocketController;
     }
 
 
@@ -60,7 +66,7 @@ public class ChangeDetector{
      * Scheduled for every seconds, so the interval must be set in seconds.
      */
     @Scheduled(fixedRate = 1000)
-    public void detectAndSendChanges(){
+    public void detectAndPublish(){
         if(urlHolder == null || neededFeedable == null)
             return;
         if(counter < interval){
@@ -78,9 +84,8 @@ public class ChangeDetector{
             Document previousPage = candidateDetector.parseHtml(oldVersionOfWebPage);
             Document newPage = candidateDetector.parseHtml(newVersionOfWebPage);
 
-            List<Node> nodes = detectChangedNodes(previousPage, newPage);
-            if(!nodes.isEmpty()) {
-                rssFeedSupplier.sendMessageToRegisteredReaders(nodes);
+            if(isChanged(previousPage, newPage)) {
+                rssFeedSupplier.generateRssFile(candidateDetector.aggregate(newPage).get(neededFeedable));
             }
 
         }
@@ -105,12 +110,18 @@ public class ChangeDetector{
         });
 
         if (!newNodes.isEmpty()) {
+            webSocketController.publishWebSocket(new RssStringHolder(
+                    newNodes.stream().map(Node::toString).collect(Collectors.toList()), new Date()));
             LOGGER.info("New nodes : " + newNodes.stream().map(Node::outerHtml).collect(Collectors.toList()));
         }
 
         return newNodes;
     }
 
+    public boolean isChanged(Document previousPage, Document newPage){
+        List<Node> nodes = detectChangedNodes(previousPage, newPage);
+        return !nodes.isEmpty();
+    }
 
 
 }

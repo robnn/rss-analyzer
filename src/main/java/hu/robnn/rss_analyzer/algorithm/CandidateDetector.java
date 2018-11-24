@@ -25,7 +25,7 @@ public class CandidateDetector {
         Element body = document.select("body").get(0);
         NodeTraversor.filter(new AggregatingFilter(), body);
 
-//        printTextNodesWithMultipleOccurrence();
+
         return copyCandidates();
     }
 

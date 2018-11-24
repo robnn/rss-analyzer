@@ -11,5 +11,4 @@ import java.util.List;
 public class RssStringHolder {
     private List<String> nodes;
     private Date timeStamp;
-    private String rssString;
 }

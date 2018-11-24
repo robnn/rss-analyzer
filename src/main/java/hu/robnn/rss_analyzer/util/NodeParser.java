@@ -4,7 +4,6 @@ import hu.robnn.rss_analyzer.model.Attribute;
 import hu.robnn.rss_analyzer.model.Element;
 import hu.robnn.rss_analyzer.model.Node;
 import hu.robnn.rss_analyzer.model.NodeHolder;
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.TextNode;
 
 import java.util.ArrayList;
@@ -17,34 +16,28 @@ public final class NodeParser {
         newNodes.forEach(n -> {
 
             //Csak a levelek érdekelnek minket jelenleg
-            if (n.childNodes().stream().allMatch(child -> child instanceof TextNode)) {
-
+            if (n instanceof org.jsoup.nodes.Element && n.childNodes().stream().allMatch(child -> child instanceof TextNode || child instanceof org.jsoup.nodes.Element)) {
+                org.jsoup.nodes.Element casted = (org.jsoup.nodes.Element) n;
                 Node node = new Node();
-
-                Document document = n.ownerDocument();
-                org.jsoup.select.Elements elementsFromDoc = document.select(n.nodeName());
 
                 ArrayList<Element> elements = new ArrayList<>();
 
-                elementsFromDoc.forEach(e -> {
-                    Element element = new Element();
-                    element.setTag(e.tagName());
+                Element element = new Element();
+                element.setTag(casted.tagName());
 
-                    element.setContent(e.text());
+                element.setContent(casted.text());
 
-                    ArrayList<Attribute> attributes = new ArrayList<>();
-                    e.attributes().forEach(a -> {
+                ArrayList<Attribute> attributes = new ArrayList<>();
+                casted.attributes().forEach(a -> {
 
-                        //Itt lehet típus szerint szűrni
-                        //Ha megadott típusokat csak azokat fogadjuk el, ha nem akkor bármit.
+                    //Itt lehet típus szerint szűrni
+                    //Ha megadott típusokat csak azokat fogadjuk el, ha nem akkor bármit.
 
-                        attributes.add(new Attribute(a.getKey(), a.getValue()));
-
-                    });
-                    element.setAttributes(attributes);
-                    elements.add(element);
+                    attributes.add(new Attribute(a.getKey(), a.getValue()));
 
                 });
+                element.setAttributes(attributes);
+                elements.add(element);
 
                 node.setElements(elements);
                 nodeList.add(node);
