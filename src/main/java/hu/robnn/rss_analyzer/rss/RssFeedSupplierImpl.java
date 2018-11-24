@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
-//TODO hasonlóan a http-hez ezt is törölni kell, amint megvan a tényleges implementáció
 @Component
 @AllArgsConstructor
 public class RssFeedSupplierImpl implements RssFeedSupplier {
@@ -35,16 +35,12 @@ public class RssFeedSupplierImpl implements RssFeedSupplier {
 
         //TODO ezt a rendes implementációban is meg kell hívni
         //sendToFrontend(nodeHolder);
-        sendToFrontend(rssFeed);
+        sendToFrontend(newNodes, rssFeed);
     }
 
     @Override
-    public void sendToFrontend(NodeHolder nodeHolder) {
-        webSocketController.publishWebSocket(nodeHolder);
-    }
-
-    @Override
-    public void sendToFrontend(String rss) {
-        webSocketController.publishWebSocket(new RssStringHolder(new Date(), rss));
+    public void sendToFrontend(List<Node> nodes, String rss) {
+        webSocketController.publishWebSocket(new RssStringHolder(
+                nodes.stream().map(Node::toString).collect(Collectors.toList()), new Date(), rss));
     }
 }

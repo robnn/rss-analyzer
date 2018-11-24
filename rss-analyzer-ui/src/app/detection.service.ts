@@ -24,4 +24,8 @@ export class DetectionService {
   changeInterval(interval: number) : Observable<any> {
     return this.httpClient.post(this.detectionUrl + "changeInterval" + "?interval=" + interval, null);
   }
+
+  resetSettings() : Observable<any> {
+    return this.httpClient.post(this.detectionUrl + "stopDetection", null);
+  }
 }

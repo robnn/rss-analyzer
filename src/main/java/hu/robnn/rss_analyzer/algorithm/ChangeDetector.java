@@ -8,6 +8,7 @@ import hu.robnn.rss_analyzer.model.UrlHolder;
 import hu.robnn.rss_analyzer.rss.RssFeedSupplier;
 import lombok.Setter;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 
 /**
@@ -25,6 +27,7 @@ import java.util.Map;
 @Scope("singleton")
 public class ChangeDetector{
 
+    private static final Logger LOGGER = Logger.getLogger("ChangeDetector");
     private final CandidateDetector candidateDetector;
     private final HtmlRepository htmlRepository;
     private final HttpClient httpClient;
@@ -40,6 +43,9 @@ public class ChangeDetector{
     private UrlHolder urlHolder;
 
     private Integer counter = 0;
+
+    @Setter
+    private Long previousId = null;
 
     public ChangeDetector(CandidateDetector candidateDetector, HtmlRepository htmlRepository, HttpClient httpClient, RssFeedSupplier rssFeedSupplier) {
         this.candidateDetector = candidateDetector;
@@ -64,29 +70,23 @@ public class ChangeDetector{
         }
 
         String newVersionOfWebPage = httpClient.getWebPageAsString(urlHolder);
-        if (!htmlRepository.findAll().isEmpty()) {
-            //TODO db használatot kitalálni, addig csak 1 elem lesz mindig felülcsapva
-            String oldVersionOfWebPage = htmlRepository.findAll().get(0).getHtmlText();
+        if (previousId != null) {
+            String oldVersionOfWebPage = htmlRepository.findById(previousId).orElseThrow(() ->
+                    new IllegalStateException("Cannot find entity for id, " + previousId)).getHtmlText();
+
             Document previousPage = candidateDetector.parseHtml(oldVersionOfWebPage);
-
-
             Document newPage = candidateDetector.parseHtml(newVersionOfWebPage);
 
             List<Node> nodes = detectChangedNodes(previousPage, newPage);
             if(!nodes.isEmpty()) {
                 rssFeedSupplier.sendMessageToRegisteredReaders(nodes);
-
-                //TODO jelenleg töröljük a db-t és belementjük az új stringet, ezt nem így kéne
-
             }
 
-            htmlRepository.deleteAll();
         }
         HtmlStringEntity newEntity = new HtmlStringEntity();
         newEntity.setHtmlText(newVersionOfWebPage);
-        htmlRepository.save(newEntity);
-
-
+        HtmlStringEntity saved = htmlRepository.save(newEntity);
+        previousId = saved.getId();
     }
 
     private List<Node> detectChangedNodes(Document previousPage, Document newPage){
@@ -96,20 +96,18 @@ public class ChangeDetector{
         List<Node> oldElements = previousAggregate.get(neededFeedable);
         List<Node> newElements = newAggregate.get(neededFeedable);
 
-        previousAggregate.forEach( (k,v) -> {
-            List<Node> nodes = new ArrayList<>();
-            newAggregate.get(k).forEach(node -> {
-                if(v.stream().noneMatch(prevNode -> prevNode.toString().equals(node.toString()))){
-                    nodes.add(node);
-                }
-            });
-            if(!nodes.isEmpty()){
-                System.out.println("Nodes changed on key: " + k);
+        List<Node> newNodes = new ArrayList<>();
+        newElements.forEach(node -> {
+            if (oldElements.stream().noneMatch(prevNode ->((Element)prevNode).html().equals(((Element)node).html()))) {
+                newNodes.add(node);
             }
         });
 
-        newElements.removeAll(oldElements);
-        return newElements;
+        if (!newNodes.isEmpty()) {
+            LOGGER.info("New nodes : " + newNodes.stream().map(Node::outerHtml));
+        }
+
+        return newNodes;
     }
 
 

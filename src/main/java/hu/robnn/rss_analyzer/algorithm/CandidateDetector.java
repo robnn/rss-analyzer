@@ -26,7 +26,20 @@ public class CandidateDetector {
         NodeTraversor.filter(new AggregatingFilter(), body);
 
 //        printTextNodesWithMultipleOccurrence();
-        return candidates;
+        return copyCandidates();
+    }
+
+    /**
+     * Copies the candidates to a new map
+     */
+    private Map<TagWithDepth, List<Node>> copyCandidates() {
+        Map<TagWithDepth, List<Node>> toReturn = new HashMap<>();
+        candidates.forEach((k,v) -> {
+            toReturn.putIfAbsent(k, new ArrayList<>());
+            v.forEach(node -> toReturn.get(k).add(node.clone()));
+        });
+
+        return toReturn;
     }
 
     /**

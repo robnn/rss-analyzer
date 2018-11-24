@@ -54,4 +54,11 @@ public class DetectionService {
     public void changeInterval(Integer interval){
         changeDetector.setInterval(interval);
     }
+
+    public void stopDetection(){
+        changeDetector.setUrlHolder(null);
+        changeDetector.setNeededFeedable(null);
+        changeDetector.setPreviousId(null);
+        changeDetector.setInterval(5);
+    }
 }

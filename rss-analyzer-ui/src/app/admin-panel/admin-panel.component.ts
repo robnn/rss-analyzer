@@ -61,6 +61,14 @@ export class AdminPanelComponent implements OnInit {
     });
   }
 
+  resetSettings() {
+    this.service.resetSettings().subscribe(data => {
+
+    });
+    this.candidates = new Array();
+    this.sentOutNodes = new Array();
+  }
+
   connect() {
     if(!this.connected){
       this.wsstate = this.stompService.state.pipe(map((state: number) => StompState[state]));

@@ -9,7 +9,5 @@ import java.util.List;
 public interface RssFeedSupplier {
     void sendMessageToRegisteredReaders(List<Node> newNodes);
 
-    void sendToFrontend(NodeHolder nodeHolder);
-
-    void sendToFrontend(String rss);
+    void sendToFrontend(List<Node> nodes, String rss);
 }

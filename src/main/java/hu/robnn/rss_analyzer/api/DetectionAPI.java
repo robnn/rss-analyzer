@@ -42,4 +42,9 @@ public class DetectionAPI {
         return HttpEntity.EMPTY;
     }
 
+    @RequestMapping(path = "detection/stopDetection", method = RequestMethod.POST)
+    public HttpEntity<?> stopDetection(){
+        detectionService.stopDetection();
+        return HttpEntity.EMPTY;
+    }
 }

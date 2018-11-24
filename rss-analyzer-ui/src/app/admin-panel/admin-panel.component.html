@@ -1,6 +1,8 @@
 <div class="margined">
-  <h1>RSS analyzer admin page</h1>
-  <br>
+  <div class="title">
+    <h1>RSS analyzer admin page</h1>
+  </div>
+  <hr />
   <div class="row">
     <div class="col-md-6 panel panel-default">
       <h2>Interval setup</h2>
@@ -9,11 +11,11 @@
           <div>
             <label>Set interval</label>
             <input type="number" class="form-control" id="interval" [(ngModel)]="interval" name="intervalNumber"
-              placeholder="Set the polling interval in seconds">
+              placeholder="Set the polling interval in seconds, default is 5 seconds">
           </div>
           <br>
           <button class="btn btn-primary" (click)="setInterval()" type="button">Change!</button>
-        </form>
+          </form>
       </div>
     </div>
 
@@ -27,6 +29,7 @@
           </div>
           <br>
           <button class="btn btn-primary" (click)="setUrl()" type="button">Change!</button>
+          <button class="btn btn-primary padding" (click)="resetSettings()" type="button">Stop current detection</button>
         </form>
       </div>
       <br>
@@ -38,20 +41,6 @@
     <div class="col-md-6 panel panel-default" *ngIf="this.candidates.length > 0">
       <h2>Candidates:</h2>
       <span>Beside you can see the sample data of the supplied page. Please select a tag and depth for the RSS feed.</span>
-      <br>
-      <ngb-accordion #acc="ngbAccordion">
-        <ngb-panel *ngFor="let candidate of candidates" id="{{candidate.tagWithDepth.tag}}{{candidate.tagWithDepth.depth}}"
-          title="Tag: {{candidate.tagWithDepth.tag}}, Depth: {{candidate.tagWithDepth.depth}}:">
-          <ng-template ngbPanelContent class="collapse">
-            <ul>
-              <li *ngFor="let data of candidate.candidates">
-                {{data}}
-              </li>
-            </ul>
-
-          </ng-template>
-        </ngb-panel>
-      </ngb-accordion>
       <br>
       <div class="form-group">
 
@@ -68,6 +57,23 @@
           <button class="btn btn-primary" (click)="setCandidate()" type="button">Set candidate!</button>
         </form>
       </div>
+      <br>
+      <h3>Sample data:</h3>
+      <ngb-accordion #acc="ngbAccordion">
+        <ngb-panel *ngFor="let candidate of candidates" id="{{candidate.tagWithDepth.tag}}{{candidate.tagWithDepth.depth}}"
+          title="Tag: {{candidate.tagWithDepth.tag}}, Depth: {{candidate.tagWithDepth.depth}}:">
+          <ng-template ngbPanelContent class="collapse">
+            <div class="list1">
+              <ul>
+                <li *ngFor="let data of candidate.candidates">
+                  <pre class="ludwig">{{data || xml}}</pre>
+                </li>
+              </ul>
+            </div>
+          </ng-template>
+        </ngb-panel>
+      </ngb-accordion>
+
     </div>
     <div class="col-md-6 panel panel-default" *ngIf="this.sentOutNodes.length > 0">
       <h2>Sent out to clients:</h2>
@@ -76,16 +82,24 @@
       <ngb-accordion #acc="ngbAccordion">
         <ngb-panel *ngFor="let node of sentOutNodes" id="{{node.timeStamp}}" title="{{node.timeStamp | date: 'medium'}}">
           <ng-template ngbPanelContent>
-            <pre>
-              {{node.rssString || xml}}
-
-            </pre>
+            <h4>Detected HTML:</h4>
+            <div class="list1">
+              <ul>
+                <li *ngFor="let nodeString of node.nodes">
+                  <pre class="ludwig">{{nodeString || xml}}</pre>
+                </li>
+              </ul>
+            </div>
+            <h4>Formatted RSS text:</h4>
+            <pre class="ludwig">{{node.rssString || xml}}</pre>
           </ng-template>
         </ngb-panel>
       </ngb-accordion>
       <br>
     </div>
+  </div>
 
-
-
+  <hr />
+  <div class="footer">
+    <p>Kurovszky Robin & Barsi Gábor ©</p>
   </div>
