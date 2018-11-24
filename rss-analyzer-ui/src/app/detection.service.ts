@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs';
 import { UrlHolder } from './model/UrlHolder';
 import { CandidateHolder } from './model/CandidateHolder';
 import { TagWithDepth } from './model/TagWithDepth';
+import { AttributesHolder } from './model/AttributesHolder';
 
 @Injectable({
   providedIn: 'root'
@@ -27,5 +28,9 @@ export class DetectionService {
 
   resetSettings() : Observable<any> {
     return this.httpClient.post(this.detectionUrl + "stopDetection", null);
+  }
+
+  setNeededAttributes(attributes: AttributesHolder) : Observable<any> {
+    return this.httpClient.post(this.detectionUrl + "setNeededAttributes" , attributes);
   }
 }

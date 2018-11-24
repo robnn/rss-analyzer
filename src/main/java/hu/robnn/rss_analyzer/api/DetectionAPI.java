@@ -1,5 +1,6 @@
 package hu.robnn.rss_analyzer.api;
 
+import hu.robnn.rss_analyzer.model.AttributesHolder;
 import hu.robnn.rss_analyzer.model.CandidateHolder;
 import hu.robnn.rss_analyzer.model.TagWithDepth;
 import hu.robnn.rss_analyzer.model.UrlHolder;
@@ -45,6 +46,12 @@ public class DetectionAPI {
     @RequestMapping(path = "detection/stopDetection", method = RequestMethod.POST)
     public HttpEntity<?> stopDetection(){
         detectionService.stopDetection();
+        return HttpEntity.EMPTY;
+    }
+
+    @RequestMapping(path  = "detection/setNeededAttributes", method = RequestMethod.POST)
+    public HttpEntity<?> setNeededAttributes(@RequestBody AttributesHolder attributesHolder){
+        detectionService.setNeededAttributes(attributesHolder);
         return HttpEntity.EMPTY;
     }
 }

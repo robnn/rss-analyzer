@@ -56,6 +56,17 @@
           <br>
           <button class="btn btn-primary" (click)="setCandidate()" type="button">Set candidate!</button>
         </form>
+        <br>
+        <form>
+            <div>
+              <label for="attributes">Type needed attributes:</label>
+              <input type="text" class="form-control" [(ngModel)]="attributes" id="attributes" name="attributes"
+              placeholder="Type the needed attributes, separated with ; (like: href;value)">
+  
+            </div>
+            <br>
+            <button class="btn btn-primary" (click)="setAttributes()" type="button">Set attributes!</button>
+          </form>
       </div>
       <br>
       <h3>Sample data:</h3>
@@ -101,5 +112,5 @@
 
   <hr />
   <div class="footer">
-    <p>Kurovszky Robin & Barsi Gábor ©</p>
+    <p>2018 - Barsi Gábor & Kurovszky Robin</p>
   </div>

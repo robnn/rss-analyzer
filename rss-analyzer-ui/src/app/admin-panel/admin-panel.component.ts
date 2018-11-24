@@ -10,6 +10,7 @@ import { WebSocketConfig } from '../WebSocketConfig';
 
 import { map } from 'rxjs/operators';
 import { NodeHolder } from '../model/NodeHolder';
+import { AttributesHolder } from '../model/AttributesHolder';
 
 @Component({
   selector: 'app-admin-panel',
@@ -30,6 +31,7 @@ export class AdminPanelComponent implements OnInit {
   private candidates: CandidateHolder[] = new Array();
   private selectedCandidate: CandidateHolder;
   private interval: number;
+  private attributes: string;
   constructor(private service: DetectionService,
     private stompService: StompService) { }
 
@@ -49,24 +51,25 @@ export class AdminPanelComponent implements OnInit {
 
   setCandidate() {
     console.log(this.selectedCandidate);
-    this.service.setFeed(this.selectedCandidate.tagWithDepth).subscribe(data => {
-
-    });
+    this.service.setFeed(this.selectedCandidate.tagWithDepth).subscribe();
     this.connect();
   }
 
   setInterval() {
-    this.service.changeInterval(this.interval).subscribe(data => {
-
-    });
+    this.service.changeInterval(this.interval).subscribe();
   }
 
   resetSettings() {
-    this.service.resetSettings().subscribe(data => {
-
-    });
+    this.service.resetSettings().subscribe();
     this.candidates = new Array();
     this.sentOutNodes = new Array();
+  }
+
+  setAttributes() {
+    var attributes = this.attributes.split(";");
+    var holder = new AttributesHolder();
+    holder.attributes = attributes;
+    this.service.setNeededAttributes(holder).subscribe();
   }
 
   connect() {
