@@ -13,20 +13,20 @@ open class UserToken {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "rss_user_token_seq")
     @SequenceGenerator(name = "rss_user_token_seq", sequenceName = "rss_user_token_seq", allocationSize = 1)
     @Column(name = "id")
-    var id: Long? = null
+    open var id: Long? = null
 
     @Column(name = "uuid")
-    private var uuid: String = UUID.randomUUID().toString()
+    open var uuid: String = UUID.randomUUID().toString()
 
     @Column(name = "token")
-    var token: String? = null
+    open var token: String? = null
 
     @Column(name = "valid_to")
-    var validTo: LocalDateTime? = null
+    open var validTo: LocalDateTime? = null
 
     @ManyToOne(targetEntity = User::class)
     @JoinColumn(name = "user_id")
-    var user: User? = null
+    open var user: User? = null
 
 
 
