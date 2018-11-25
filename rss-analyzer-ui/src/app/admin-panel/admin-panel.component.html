@@ -1,0 +1,105 @@
+<div class="margined">
+  <div class="title">
+    <h1><img src="../../assets/rss-icon.png" style="width:40px;"> RSS analyzer admin page</h1>
+  </div>
+  <hr />
+  <div class="row">
+    <div class="col-md-6 panel panel-default">
+      <h2>Interval setup</h2>
+      <div class="form-group">
+        <form>
+          <div>
+            <label>Set interval</label>
+            <input type="number" class="form-control" id="interval" [(ngModel)]="interval" name="intervalNumber"
+              placeholder="Set the polling interval in seconds, default is 5 seconds">
+          </div>
+          <br>
+          <button class="btn btn-lg btn-primary btn-block btn-signin" (click)="setInterval()" type="button">Change!</button>
+          </form>
+      </div>
+    </div>
+
+    <div class="col-md-6 panel panel-default">
+      <h2>URL setup</h2>
+      <div class="form-group">
+        <form>
+          <div>
+            <label for="urlText">Set URL:</label>
+            <input type="text" class="form-control" id="urlText" [(ngModel)]="urlText" name="urlText" placeholder="After you set the url, you can select a candidate">
+          </div>
+          <br>
+          <button class="btn btn-lg btn-primary btn-block btn-signin" (click)="setUrl()" type="button">Change!</button>
+          <button *ngIf="this.sentOutNodes.length > 0" class="btn btn-lg btn-primary btn-block btn-signin" (click)="resetSettings()" type="button">Stop current detection</button>
+        </form>
+      </div>
+      <br>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-md-6 panel panel-default" *ngIf="this.candidates.length > 0">
+      <h2>Candidates:</h2>
+      <p>Beside you can see the sample data of the supplied page. Please select a tag and depth for the RSS feed.</p>
+      <p>Note: currently the system only works with 'a' tags, so the samples are filtered, to only show that.</p>
+      <br>
+      <div class="form-group">
+
+        <form>
+          <div>
+            <label for="candidateSelector">Set tag and depth:</label>
+            <select class="form-control" [(ngModel)]="selectedCandidate" name="candidateSelector" id="candidateSelector">
+              <option *ngFor="let candidate of candidates" [ngValue]="candidate">Tag: {{candidate.tagWithDepth.tag}},
+                Depth: {{candidate.tagWithDepth.depth}}</option>
+            </select>
+
+          </div>
+          <br>
+          <button class="btn btn-lg btn-primary btn-block btn-signin" (click)="setCandidate()" type="button">Set candidate!</button>
+        </form>
+      </div>
+      <br>
+      <h3>Sample data:</h3>
+      <ngb-accordion #acc="ngbAccordion">
+        <ngb-panel *ngFor="let candidate of candidates" id="{{candidate.tagWithDepth.tag}}{{candidate.tagWithDepth.depth}}"
+          title="Tag: {{candidate.tagWithDepth.tag}}, Depth: {{candidate.tagWithDepth.depth}}:">
+          <ng-template ngbPanelContent class="collapse">
+            <div class="list1">
+              <ul>
+                <li *ngFor="let data of candidate.candidates">
+                  <pre class="ludwig">{{data || xml}}</pre>
+                </li>
+              </ul>
+            </div>
+          </ng-template>
+        </ngb-panel>
+      </ngb-accordion>
+
+    </div>
+    <div class="col-md-6 panel panel-default" *ngIf="this.sentOutNodes.length > 0">
+      <h2>Nodes:</h2>
+      <p>Beside you can see the data which was published to rss, the first element is the full nodelist, after that, only the new nodes will be displayed.</p>
+      <p><a href="http://localhost:8080/detection/rss" target="_blank" rel="noopener noreferrer"><img class="icon" src="../../assets/rss-icon.png"></a> Click here for the RSS feed </p>
+      <br>
+      <ngb-accordion #acc="ngbAccordion">
+        <ngb-panel *ngFor="let node of sentOutNodes" id="{{node.timeStamp}}" title="{{node.timeStamp | date: 'medium'}}">
+          <ng-template ngbPanelContent>
+            <h4>Detected HTML:</h4>
+            <div class="list1">
+              <ul>
+                <li *ngFor="let nodeString of node.nodes">
+                  <pre class="ludwig">{{nodeString || xml}}</pre>
+                </li>
+              </ul>
+            </div>
+          </ng-template>
+        </ngb-panel>
+      </ngb-accordion>
+      <br>
+    </div>
+  </div>
+
+  <hr />
+  <div class="footer">
+    <p>2018 - Barsi Gábor & Kurovszky Robin</p>
+  </div>

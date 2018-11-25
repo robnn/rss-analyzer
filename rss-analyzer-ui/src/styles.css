@@ -1,1 +1,57 @@
 /* You can add global styles to this file, and also import other style files */
+.margined{
+    margin: 40px;
+}
+
+.title {
+    text-align: center;
+}
+
+.padding {
+    margin-left: 5px;
+}
+
+.icon {
+    width: 25px;
+}
+
+.footer {
+    text-align: center;
+}
+.list1 ul { list-style:none; text-align:left; padding: 0px}
+.list1 ul li { display:inline; }
+
+
+.ludwig {
+    position: relative;
+    padding-left: 1em;
+    border-left: 0.2em solid teal;
+    font-family: 'Roboto', serif;
+    font-size: 1.0em;
+    line-height: 1.5em;
+    font-weight: 100;
+  }
+
+  .btn.btn-signin {
+    /*background-color: #4d90fe; */
+    background-color: rgb(104, 145, 162);
+    /* background-color: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));*/
+    padding: 0px;
+    font-weight: 700;
+    font-size: 14px;
+    height: 36px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    border: none;
+    -o-transition: all 0.218s;
+    -moz-transition: all 0.218s;
+    -webkit-transition: all 0.218s;
+    transition: all 0.218s;
+}
+
+.btn.btn-signin:hover,
+.btn.btn-signin:active,
+.btn.btn-signin:focus {
+    background-color: orange;
+}
