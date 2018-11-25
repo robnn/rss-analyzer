@@ -38,7 +38,7 @@ public class CandidateDetectorTest {
             String testPage = readTestPage("index.html");
             Document document = candidateDetector.parseHtml(testPage);
             Map<TagWithDepth, List<Node>> aggregate = candidateDetector.aggregate(document);
-            assertEquals(14, aggregate.size());
+            assertEquals(127, aggregate.size());
         } catch (IOException e) {
             e.printStackTrace();
         }
