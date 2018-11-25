@@ -19,7 +19,7 @@ export class AppComponent implements OnDestroy, OnInit {
   realUserName : string;
 
   constructor(private errorService: ErrorService,
-              private userService: UserService,
+              public userService: UserService,
               private router: Router) {
     this.initializeErrors();
   }

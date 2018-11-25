@@ -7,9 +7,7 @@ import { $ } from 'protractor';
   styleUrls: ['./error-modal.component.css']
 })
 export class ErrorModalComponent implements OnInit {
-  private errorMessages: string[] = new Array();
-
-  private isModalOpen = false;
+  public errorMessages: string[] = new Array();
   
   show(errors: string[]): any {
     if(errors){
