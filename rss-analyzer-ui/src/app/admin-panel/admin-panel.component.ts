@@ -29,12 +29,11 @@ export class AdminPanelComponent implements OnInit {
   public wsstate: Observable<string>;
 
   private connected: boolean = false;
-  private sentOutNodes: NodeHolder[] = new Array();
-  private urlText: string;
-  private candidates: CandidateHolder[] = new Array();
+  public sentOutNodes: NodeHolder[] = new Array();
+  public urlText: string;
+  public candidates: CandidateHolder[] = new Array();
   private selectedCandidate: CandidateHolder;
-  private interval: number;
-  private attributes: string;
+  public interval: number;
   constructor(private service: DetectionService,
     private stompService: StompService,
     private userService: UserService,

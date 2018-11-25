@@ -78,7 +78,7 @@ public class RssAnalyzerConfiguration extends AbstractWebSocketMessageBrokerConf
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws-endpoint").setAllowedOrigins("http://localhost:4200");
-        registry.addEndpoint("/ws-endpoint").setAllowedOrigins("http://localhost:4200").withSockJS();
+        registry.addEndpoint("/ws-endpoint").setAllowedOrigins("*");
+        registry.addEndpoint("/ws-endpoint").setAllowedOrigins("*").withSockJS();
     }
 }
