@@ -65,6 +65,11 @@ public class RssAnalyzerConfiguration extends AbstractWebSocketMessageBrokerConf
         return entityManagerFactoryBean;
     }
 
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.enableSimpleBroker("/topic");

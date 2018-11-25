@@ -1,10 +1,11 @@
 package hu.robnn.rss_analyzer.api;
 
-import hu.robnn.rss_analyzer.model.AttributesHolder;
+import hu.robnn.rss_analyzer.enums.UserRole;
 import hu.robnn.rss_analyzer.model.CandidateHolder;
 import hu.robnn.rss_analyzer.model.TagWithDepth;
 import hu.robnn.rss_analyzer.model.UrlHolder;
 import hu.robnn.rss_analyzer.service.DetectionService;
+import hu.robnn.rss_analyzer.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.*;
@@ -24,31 +25,37 @@ public class DetectionAPI {
     private static final Logger LOGGER = Logger.getLogger("DetectionAPI");
 
     private final DetectionService detectionService;
+    private final UserService userService;
 
     @Autowired
-    public DetectionAPI(DetectionService detectionService) {
+    public DetectionAPI(DetectionService detectionService, UserService userService) {
         this.detectionService = detectionService;
+        this.userService = userService;
     }
 
     @RequestMapping(path = "detection", method = RequestMethod.POST)
-    public ResponseEntity<List<CandidateHolder>> detectForWebPage(@RequestBody UrlHolder urlHolder){
+    public ResponseEntity<List<CandidateHolder>> detectForWebPage(@RequestBody UrlHolder urlHolder, @RequestHeader String authToken){
+        userService.authenticate(authToken, UserRole.USER);
         return new ResponseEntity<>(detectionService.detectForUrlHolder(urlHolder), HttpStatus.OK);
     }
 
     @RequestMapping(path = "detection/setFeedable", method = RequestMethod.POST)
-    public HttpEntity<?> selectFeedable(@RequestBody TagWithDepth tagWithDepth){
+    public HttpEntity<?> selectFeedable(@RequestBody TagWithDepth tagWithDepth, @RequestHeader String authToken){
+        userService.authenticate(authToken, UserRole.USER);
         detectionService.setNeededFeedAndStartChangeDetection(tagWithDepth);
         return HttpEntity.EMPTY;
     }
 
     @RequestMapping(path = "detection/changeInterval", method = RequestMethod.POST)
-    public HttpEntity<?> changeInterval(@RequestParam("interval") Integer interval){
+    public HttpEntity<?> changeInterval(@RequestParam("interval") Integer interval, @RequestHeader String authToken){
+        userService.authenticate(authToken, UserRole.USER);
         detectionService.changeInterval(interval);
         return HttpEntity.EMPTY;
     }
 
     @RequestMapping(path = "detection/stopDetection", method = RequestMethod.POST)
-    public HttpEntity<?> stopDetection(){
+    public HttpEntity<?> stopDetection(@RequestHeader String authToken){
+        userService.authenticate(authToken, UserRole.USER);
         detectionService.stopDetection();
         return HttpEntity.EMPTY;
     }

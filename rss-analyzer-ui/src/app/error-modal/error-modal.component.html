@@ -1,0 +1,5 @@
+<div class="right-modal-container">
+  <p *ngFor="let error of errorMessages">
+    <ngb-alert type="danger" (close)="closeAlert(error)">{{ error }}</ngb-alert>
+  </p>
+</div>

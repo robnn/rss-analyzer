@@ -11,6 +11,9 @@ import { WebSocketConfig } from '../WebSocketConfig';
 import { map } from 'rxjs/operators';
 import { NodeHolder } from '../model/NodeHolder';
 import { AttributesHolder } from '../model/AttributesHolder';
+import { UserService } from '../user.service';
+import { Router } from '@angular/router';
+import { ErrorService } from '../error.service';
 
 @Component({
   selector: 'app-admin-panel',
@@ -33,43 +36,56 @@ export class AdminPanelComponent implements OnInit {
   private interval: number;
   private attributes: string;
   constructor(private service: DetectionService,
-    private stompService: StompService) { }
+    private stompService: StompService,
+    private userService: UserService,
+    private router: Router,
+    private errorService: ErrorService) { }
 
   ngOnInit() {
+    if (!this.userService.getAuthToken()) {
+      this.router.navigate(['/login']);
+    } else {
+      this.userService.getUserData2().subscribe();
+    }
   }
 
   setUrl() {
-    let urlHolder = new UrlHolder();
-    urlHolder.pageUrl = this.urlText;
-    this.service.detectForWebPage(urlHolder).subscribe(data => {
-      this.candidates = new Array();
-      data.forEach(x => {
-        this.candidates.push(x);
-      })
-    });
+    if(!this.urlText){
+      this.errorService.addErrors(["Url must not be empty!"]);
+    } else {
+      let urlHolder = new UrlHolder();
+      urlHolder.pageUrl = this.urlText;
+      this.service.detectForWebPage(urlHolder).subscribe(data => {
+        this.candidates = new Array();
+        data.forEach(x => {
+          this.candidates.push(x);
+        })
+      });
+    }
   }
 
   setCandidate() {
-    console.log(this.selectedCandidate);
-    this.service.setFeed(this.selectedCandidate.tagWithDepth).subscribe();
-    this.connect();
+    if(!this.selectedCandidate){
+      this.errorService.addErrors(["You must select a candidate!"]);
+    } else {
+      this.service.setFeed(this.selectedCandidate.tagWithDepth).subscribe();
+      this.connect();
+    }
   }
 
   setInterval() {
-    this.service.changeInterval(this.interval).subscribe();
+    if(!this.interval){
+      this.errorService.addErrors(["You must set the interval!"]);
+    } else {
+      this.service.changeInterval(this.interval).subscribe();
+    }
+    
   }
 
   resetSettings() {
     this.service.resetSettings().subscribe();
     this.candidates = new Array();
     this.sentOutNodes = new Array();
-  }
-
-  setAttributes() {
-    var attributes = this.attributes.split(";");
-    var holder = new AttributesHolder();
-    holder.attributes = attributes;
-    this.service.setNeededAttributes(holder).subscribe();
   }
 
   connect() {

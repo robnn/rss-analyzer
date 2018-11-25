@@ -1,0 +1,16 @@
+<div>
+  <div class="card card-container">
+      <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
+      <p id="profile-name" class="profile-name-card"></p>
+      <form class="form-signin">
+          <span id="reauth-email" class="reauth-email">Registration form</span>
+          <input type="email" id="inputEmail" class="form-control" placeholder="Email" name="email" required autofocus [(ngModel)]="user.emailAddress">
+          <input type="text" id="inputUserName" class="form-control" placeholder="Username" name="userName" required [(ngModel)]="user.userName">
+          <input type="text" id="inputUserRealName" class="form-control" placeholder="Real name" name="realName" required [(ngModel)]="user.realName">
+          <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password" required [(ngModel)]="user.password">
+          <input type="password" id="inputPasswordSecond" class="form-control" placeholder="Password again" name="password" required [(ngModel)]="secondPassword">
+
+          <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit" (click)="registerClick()">Register!</button>
+      </form><!-- /form -->
+  </div><!-- /card-container -->
+</div><!-- /container -->

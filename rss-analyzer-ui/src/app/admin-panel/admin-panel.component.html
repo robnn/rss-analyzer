@@ -14,7 +14,7 @@
               placeholder="Set the polling interval in seconds, default is 5 seconds">
           </div>
           <br>
-          <button class="btn btn-dark" (click)="setInterval()" type="button">Change!</button>
+          <button class="btn btn-lg btn-primary btn-block btn-signin" (click)="setInterval()" type="button">Change!</button>
           </form>
       </div>
     </div>
@@ -28,8 +28,8 @@
             <input type="text" class="form-control" id="urlText" [(ngModel)]="urlText" name="urlText" placeholder="After you set the url, you can select a candidate">
           </div>
           <br>
-          <button class="btn btn-dark" (click)="setUrl()" type="button">Change!</button>
-          <button *ngIf="this.sentOutNodes.length > 0" class="btn btn-dark padding" (click)="resetSettings()" type="button">Stop current detection</button>
+          <button class="btn btn-lg btn-primary btn-block btn-signin" (click)="setUrl()" type="button">Change!</button>
+          <button *ngIf="this.sentOutNodes.length > 0" class="btn btn-lg btn-primary btn-block btn-signin" (click)="resetSettings()" type="button">Stop current detection</button>
         </form>
       </div>
       <br>
@@ -55,7 +55,7 @@
 
           </div>
           <br>
-          <button class="btn btn-dark" (click)="setCandidate()" type="button">Set candidate!</button>
+          <button class="btn btn-lg btn-primary btn-block btn-signin" (click)="setCandidate()" type="button">Set candidate!</button>
         </form>
       </div>
       <br>

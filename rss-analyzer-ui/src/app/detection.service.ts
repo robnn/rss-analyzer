@@ -5,6 +5,7 @@ import { UrlHolder } from './model/UrlHolder';
 import { CandidateHolder } from './model/CandidateHolder';
 import { TagWithDepth } from './model/TagWithDepth';
 import { AttributesHolder } from './model/AttributesHolder';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,25 +13,22 @@ import { AttributesHolder } from './model/AttributesHolder';
 export class DetectionService {
   private detectionUrl = 'http://localhost:8080/detection/'
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient,
+    private userService: UserService) { }
 
   detectForWebPage(urlHolder: UrlHolder) : Observable<CandidateHolder[]> {
-    return this.httpClient.post<CandidateHolder[]>(this.detectionUrl, urlHolder);
+    return this.httpClient.post<CandidateHolder[]>(this.detectionUrl, urlHolder, {  headers :this.userService.getAuthTokenAsHttpHeader(null)});
   }
 
   setFeed(tagWithDepth: TagWithDepth)  : Observable<any> {
-    return this.httpClient.post(this.detectionUrl + "setFeedable", tagWithDepth);
+    return this.httpClient.post(this.detectionUrl + "setFeedable", tagWithDepth, {  headers :this.userService.getAuthTokenAsHttpHeader(null)});
   }
 
   changeInterval(interval: number) : Observable<any> {
-    return this.httpClient.post(this.detectionUrl + "changeInterval" + "?interval=" + interval, null);
+    return this.httpClient.post(this.detectionUrl + "changeInterval" + "?interval=" + interval, null, {  headers :this.userService.getAuthTokenAsHttpHeader(null)});
   }
 
   resetSettings() : Observable<any> {
-    return this.httpClient.post(this.detectionUrl + "stopDetection", null);
-  }
-
-  setNeededAttributes(attributes: AttributesHolder) : Observable<any> {
-    return this.httpClient.post(this.detectionUrl + "setNeededAttributes" , attributes);
+    return this.httpClient.post(this.detectionUrl + "stopDetection", null, {  headers :this.userService.getAuthTokenAsHttpHeader(null)});
   }
 }

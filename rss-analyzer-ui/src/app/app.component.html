@@ -1,2 +1,44 @@
-<app-admin-panel>Loading...</app-admin-panel>
-
+<nav class="navbar navbar-expand-lg navbar-light bg-light navbar-custom">
+    <a class="navbar-brand" href="#">
+       RSS analyzer</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li *ngIf="userService.getAuthToken()" class="nav-item active">
+          <a class="nav-link" href="#">Home
+            <span class="sr-only">(current)</span>
+          </a>
+        </li>
+      </ul>
+  
+      <div *ngIf="userService.getUser()">
+        <ul class="navbar-nav mr-auto">
+          <li>
+           
+            <span class="padding">{{userService.getUser().realName}}</span>
+          </li>
+          <li>
+            <button class="btn btn-lg btn-primary btn-block btn-signin padding" (click)=logout()>
+              <span class="padding">Logout</span>
+            </button>
+          </li>
+        </ul>
+  
+  
+      </div>
+      <div *ngIf="!userService.getAuthToken()">
+        <button class="btn btn-lg btn-primary btn-block btn-signin padding" routerLink="/login" routerLinkActive="active">
+          <span class="padding">Login</span>
+        </button>
+      </div>
+      <div *ngIf="!userService.getAuthToken()">
+        <a routerLink="/register" routerLinkActive="active" class="padding">Or register</a>
+      </div>
+    </div>
+  </nav>
+  <router-outlet></router-outlet>
+  
+  <app-error-modal #modalError>Loading...</app-error-modal>
